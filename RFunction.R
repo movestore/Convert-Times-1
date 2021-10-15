@@ -23,7 +23,7 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true
     logger.info("You have selected to add local timestamps.")
     timestamp_local <- apply(data.frame(timestamps(data),tz_info), 1, function(x) as.character(lubridate::with_tz(x[1], x[2])))
     data@data <- cbind(data@data,timestamp_local,"local_lz"=tz_info)
-    data.csv <- cbind(data.csv,"local_lz"=tz_info)
+    data.csv <- cbind(data.csv,timestamp_local,"local_timezone"=tz_info)
   }
   if (local_details==TRUE)
   {
