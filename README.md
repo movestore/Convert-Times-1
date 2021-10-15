@@ -2,7 +2,7 @@
 
 MoveApps
 
-Github repository: *github.com/movestore/Convert-Times*
+GitHub repository: *github.com/movestore/Convert-Times*
 
 ## Description
 This App converts the data timestamps to (i) local timezones (with savings time), (ii) details of local times, (iii) mean solar time and/or (iv) true solar time. The values are added to the output and can be downloaded as .csv artefact. 
