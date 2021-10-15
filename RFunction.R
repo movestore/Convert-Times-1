@@ -1,6 +1,7 @@
 library('move')
 library('lubridate')
 library('lutz')
+library('sf')
 
 rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true_solar=FALSE)
 {
