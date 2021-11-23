@@ -14,7 +14,7 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true
   names(data.csv) <- make.names(names(data.csv),allow_=FALSE)
   location.long <- coordinates(data)[,1]
   location.lat <- coordinates(data)[,2]
-  if (("individual.taxon.canonical.name" %in% names(data.csv))==FALSE & "taxon.canonical.name" %in% names(data.csv)) names(data.csv[which(names(data.csv)=="taxon.canonical.name")]) <- "individual.taxon.canonical.name"
+  if (("individual.taxon.canonical.name" %in% names(data.csv))==FALSE & "taxon.canonical.name" %in% names(data.csv)) names(data.csv)[which(names(data.csv)=="taxon.canonical.name")] <- "individual.taxon.canonical.name"
   if (("location.long" %in% names(data.csv))==FALSE) data.csv <- data.frame(data.csv,location.long,location.lat)
   data.csv <- data.csv[c("trackId","timestamp","location.long","location.lat","sensor","individual.taxon.canonical.name")]
   
