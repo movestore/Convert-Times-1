@@ -26,21 +26,22 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true
   {
     logger.info("You have selected to add local timestamps.")
     timestamp_local <- apply(data.frame(timestamps(data),tz_info), 1, function(x) as.character(lubridate::with_tz(x[1], x[2])))
-    data@data <- cbind(data@data,timestamp_local,"local_lz"=tz_info)
+    data@data <- cbind(data@data,timestamp_local,"local_tz"=tz_info)
     data.csv <- cbind(data.csv,timestamp_local,"local_timezone"=tz_info)
   }
   if (local_details==TRUE)
   {
     logger.info("You have selected to add detailed time information of the local timestamps.")
     timestamp_local <- apply(data.frame(timestamps(data),tz_info), 1, function(x) as.character(lubridate::with_tz(x[1], x[2])))
-    date <- as.Date(timestamp_local)
+    timestamp_local_PX <- as.POSIXct(timestamp_local,format="%Y-%m-%d %H:%M:%S")
+    date <- as.Date(timestamp_local_PX)
     
-    time <- strftime(timestamp_local, format="%H:%M:%S")
-    year <- year(timestamp_local)
-    month <- months(as.POSIXct(timestamp_local))
-    yday <- as.numeric(strftime(date, format = "%j"))
-    calender_week <- as.numeric(strftime(date, format = "%V"))
-    weekday <- weekdays(as.POSIXct(timestamp_local))
+    time <- strftime(timestamp_local_PX, format="%H:%M:%S")
+    year <- year(timestamp_local_PX)
+    month <- months(as.POSIXct(timestamp_local_PX))
+    yday <- as.numeric(strftime(timestamp_local_PX, format = "%j"))
+    calender_week <- as.numeric(strftime(timestamp_local_PX, format = "%V"))
+    weekday <- weekdays(as.POSIXct(timestamp_local_PX))
     data@data <- cbind(data@data,date,time,year,month,weekday,yday,calender_week)
     data.csv <- cbind(data.csv,date,time,year,month,weekday,yday,calender_week)
   }
