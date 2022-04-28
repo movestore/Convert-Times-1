@@ -2,6 +2,7 @@ library('move')
 library('lubridate')
 library('lutz')
 library('sf')
+library('maptools')
 
 rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true_solar=FALSE)
 {
@@ -17,6 +18,13 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true
   if (("individual.taxon.canonical.name" %in% names(data.csv))==FALSE & "taxon.canonical.name" %in% names(data.csv)) names(data.csv)[which(names(data.csv)=="taxon.canonical.name")] <- "individual.taxon.canonical.name"
   if (("location.long" %in% names(data.csv))==FALSE) data.csv <- data.frame(data.csv,location.long,location.lat)
   data.csv <- data.csv[c("trackId","timestamp","location.long","location.lat","sensor","individual.taxon.canonical.name")]
+  
+  # add sunrise and sunset times of the day
+  sunrise_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunrise",POSIXct.out=TRUE)$time
+  sunset_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunset",POSIXct.out=TRUE)$time 
+  
+  data@data <- cbind(data@data,sunrise_timestamp,sunset_timestamp)
+  data.csv <- cbind(data.csv,sunrise_timestamp,sunset_timestamp)
   
   # ask the cache and/or Google for the timezone at these coordinates
   tz_info <- tz_lookup_coords(coordinates(data)[,2], coordinates(data)[,1], method = "accurate")
