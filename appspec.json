@@ -42,6 +42,10 @@
       },
 	  {
         "name": "sf"
+      },
+	  ,
+	  {
+        "name": "maptools"
       }
     ]
   },
@@ -57,7 +61,9 @@
 	"month",
 	"true solar time",
 	"mean solar time",
-	"time components"
+	"time components",
+	"sunrise",
+	"sunset"
   ],
   "people": [
     {
