@@ -17,7 +17,9 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true
   location.lat <- coordinates(data)[,2]
   if (("individual.taxon.canonical.name" %in% names(data.csv))==FALSE & "taxon.canonical.name" %in% names(data.csv)) names(data.csv)[which(names(data.csv)=="taxon.canonical.name")] <- "individual.taxon.canonical.name"
   if (("location.long" %in% names(data.csv))==FALSE) data.csv <- data.frame(data.csv,location.long,location.lat)
-  data.csv <- data.csv[c("trackId","timestamp","location.long","location.lat","sensor","individual.taxon.canonical.name")]
+  
+  other_names <- which(names(data.csv) %in% c("trackId","timestamp","location.long","location.lat","sensor","individual.taxon.canonical.name")==FALSE)
+  data.csv <- cbind(data.csv[c("trackId","timestamp","location.long","location.lat","sensor","individual.taxon.canonical.name")],data.csv[,other_names])
   
   # add sunrise and sunset times of the day
   sunrise_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunrise",POSIXct.out=TRUE)$time
