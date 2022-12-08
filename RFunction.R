@@ -42,8 +42,9 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true
   if (local_details==TRUE)
   {
     logger.info("You have selected to add detailed time information of the local timestamps.")
-    timestamp_local <- apply(data.frame(timestamps(data),tz_info), 1, function(x) as.character(lubridate::with_tz(x[1], x[2])))
-    timestamp_local_PX <- as.POSIXct(timestamp_local,format="%Y-%m-%d %H:%M:%S")
+    timestamp_local <- apply(data.frame(timestamps(data),tz_info), 1, function(x) as.character(lubridate::with_tz(x[1], tzone=x[2])))
+    timestamp_local[which(nchar(timestamp_local)==10)] <- paste(timestamp_local[which(nchar(timestamp_local)==10)],"00:00:00") #adapt midnight format
+    timestamp_local_PX <- as.POSIXct(timestamp_local,format="%Y-%m-%d %H:%M:%S") #note that UTC here is technically not correct, but this way can calculate local time details
     date <- as.Date(timestamp_local_PX)
     
     time <- strftime(timestamp_local_PX, format="%H:%M:%S")
