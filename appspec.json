@@ -86,6 +86,18 @@
       "orcid": "0000-0003-0193-1563",
       "affiliation": "Max-Planck-Institute of Animal Behavior",
       "affiliationRor": "https://ror.org/026stee22"
+    },
+	{
+     "firstName": "Sarah",
+      "middleInitials": "C.",
+      "lastName": "Davidson",
+      "email": "sdavidson@ab.mpg.de",
+      "roles": [
+        "contributor"
+      ],
+      "orcid": "0000-0002-2766-9201",
+      "affiliation": "Max-Planck-Institute of Animal Behavior",
+      "affiliationRor": "https://ror.org/026stee22"
     }
   ],
   "documentation": {
