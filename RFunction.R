@@ -4,12 +4,12 @@ library('lutz')
 library('sf')
 library('maptools')
 
-rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true_solar=FALSE)
+rFunction <- function(data,local=FALSE,local_details=FALSE,sunriset=FALSE,mean_solar=FALSE,true_solar=FALSE)
 {
 
   Sys.setenv(tz="UTC")
   
-  if (local==FALSE & local_details==FALSE & mean_solar==FALSE & true_solar==FALSE) logger.info("You have not selected any timestamp conversion. The original dataset will be returned and provided as csv output.")
+  if (local==FALSE & local_details==FALSE & sunriset==FALSE & mean_solar==FALSE & true_solar==FALSE) logger.info("You have not selected any timestamp conversion. The original dataset will be returned and provided as csv output.")
   
   data.csv <- as.data.frame(data)
   names(data.csv) <- make.names(names(data.csv),allow_=FALSE)
@@ -20,16 +20,7 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true
   
   other_names <- which(names(data.csv) %in% c("trackId","timestamp","location.long","location.lat","sensor","individual.taxon.canonical.name")==FALSE)
   data.csv <- cbind(data.csv[c("trackId","timestamp","location.long","location.lat","sensor","individual.taxon.canonical.name")],data.csv[,other_names])
-  
-  # add sunrise and sunset times of the day
-  sunrise_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunrise",POSIXct.out=TRUE)$time
-  sunset_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunset",POSIXct.out=TRUE)$time 
-  
-  data@data <- cbind(data@data,sunrise_timestamp,sunset_timestamp)
-  data.csv <- cbind(data.csv,sunrise_timestamp,sunset_timestamp)
-  
-  # ask the cache and/or Google for the timezone at these coordinates
-  tz_info <- tz_lookup_coords(coordinates(data)[,2], coordinates(data)[,1], method = "accurate")
+
   
   #return in daylight local
   if(local==TRUE) 
@@ -56,6 +47,17 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true
     data@data <- cbind(data@data,date,time,year,month,weekday,yday,calender_week)
     data.csv <- cbind(data.csv,date,time,year,month,weekday,yday,calender_week)
   }
+  if (sunriset==TRUE)
+  {
+    logger.info("You have selected to add the time of sunrise and sunset.")
+    # add sunrise and sunset times of the day
+    sunrise_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunrise",POSIXct.out=TRUE)$time
+    sunset_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunset",POSIXct.out=TRUE)$time 
+    data@data <- cbind(data@data,sunrise_timestamp,sunset_timestamp)
+    data.csv <- cbind(data.csv,sunrise_timestamp,sunset_timestamp)
+    # ask the cache and/or Google for the timezone at these coordinates
+    tz_info <- tz_lookup_coords(coordinates(data)[,2], coordinates(data)[,1], method = "accurate")
+  }
   if (mean_solar==TRUE)
   {
     logger.info("You have selected to add mean solar time timestamps.")
@@ -67,7 +69,7 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,mean_solar=FALSE,true
   }
   if (true_solar==TRUE)
   {
-    logger.info("You ahve selected to add true solar time timestamps.")
+    logger.info("You have selected to add true solar time timestamps.")
     time.adjustment <- 239.34 * coordinates(data)[,1] #in secs --> 3.989 minutes = 239.34 seconds per degree
     timestamp_mean_solar <- timestamps(data) + as.difftime(time.adjustment,units="secs") #add seconds to the UTC time
     # Use the equation of time to compute the discrepancy between apparent and

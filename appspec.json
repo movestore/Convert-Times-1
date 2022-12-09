@@ -3,28 +3,35 @@
       {
       "id": "local",
       "name": "Local time",
-      "description": "Select if you want to add local timezone (with daylight savings time) converted timestamps to your dataset.",
+      "description": "Select if you want to calculate and add local timezone (including daylight saving time where applicable) and local time to your dataset.",
       "defaultValue": false,
       "type": "CHECKBOX"
     },
 	    {
       "id": "local_details",
       "name": "Local time details",
-      "description": "Select if you want to add the following details of the local timestamps to your dataset: date, time, year, month, Julian day, calendar week, weekday.",
+      "description": "Select if you want to calculate and add the following details of the local timestamps to your dataset: date, time, year, month, Julian day, calendar week, weekday.",
+      "defaultValue": false,
+      "type": "CHECKBOX"
+    },
+      {
+      "id": "sunriset",
+      "name": "Sunrise and sunset",
+      "description": "Select if you want to calculate and add the time of local sunrise and sunset.",
       "defaultValue": false,
       "type": "CHECKBOX"
     },
 	    {
       "id": "mean_solar",
       "name": "Mean solar time",
-      "description": "Select if you want to add mean solar time converted timestamps to your dataset.",
+      "description": "Select if you want to calculate and add mean solar time to your dataset.",
       "defaultValue": false,
       "type": "CHECKBOX"
     },
 	    {
       "id": "true_solar",
       "name": "True solar time",
-      "description": "Select if you want to add true solar time converted timestamps to your dataset.",
+      "description": "Select if you want to calculate and add true solar time to your dataset.",
       "defaultValue": false,
       "type": "CHECKBOX"
     }
@@ -63,7 +70,8 @@
 	"mean solar time",
 	"time components",
 	"sunrise",
-	"sunset"
+	"sunset",
+  "daylight saving"
   ],
   "people": [
     {
