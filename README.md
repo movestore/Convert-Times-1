@@ -22,7 +22,9 @@ moveStack in Movebank format
 `data_wtime.csv`: csv file of the complete dataset with the local time information added, based on the selected settings. All timestamps are provided in the format `yyyy-MM-dd HH:mm:ss.SSS`. The sunrise, sunset, mean solar and true solar times are reported in UTC. The sunrise and sunset are provided for the sunrise and sunset between which the local timestamp falls. The local time components are based on the local time.
 
 ### Parameters
-`local`: Checkbox to select if timestamps shall be converted to local times and added to the dataset, along with the time of local sunrise and sunset. Defaults to FALSE.
+With all parameters being unselected, local sunrise and sunset is provided for each location (in UTC).
+
+`local`: Checkbox to select if timestamps shall be converted to local times and added to the dataset. Defaults to FALSE.
 
 `local_details`: Checkbox to select if time components of the converted local times shall be added to the dataset. Defaults to FALSE.
 
