@@ -9,7 +9,7 @@ args <- list()
 #################################################################
 ########################### Arguments ###########################
 # The data parameter will be added automatically if input data is available
-# The name of the field in the vector must be exaclty the same as in the r function signature
+# The name of the field in the vector must be exactly the same as in the r function signature
 # Example:
 # rFunction = function(username, password)
 # The paramter must look like:
@@ -19,6 +19,7 @@ args <- list()
 # Add your arguments of your r function here
 args[["local"]] <- TRUE
 args[["local_details"]] <- TRUE
+args[["sunriset"]] <- TRUE
 args[["mean_solar"]] <- TRUE
 args[["true_solar"]] <- TRUE
 
@@ -34,7 +35,7 @@ if(!is.null(inputFileName) && inputFileName != "" && file.exists(inputFileName))
   cat("Skip loading: no input File", "\n")
 }
 
-# Add the data paramter if input data is available
+# Add the data paramater if input data is available
 if (!is.null(inputData)) {
   args[["data"]] <- inputData
 }
