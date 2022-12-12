@@ -21,15 +21,29 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,sunriset=FALSE,mean_s
   other_names <- which(names(data.csv) %in% c("trackId","timestamp","location.long","location.lat","sensor","individual.taxon.canonical.name")==FALSE)
   data.csv <- cbind(data.csv[c("trackId","timestamp","location.long","location.lat","sensor","individual.taxon.canonical.name")],data.csv[,other_names])
 
+  if (sunriset==TRUE)
+  {
+    logger.info("You have selected to add the time of sunrise and sunset.")
+    # add sunrise and sunset times of the day
+    sunrise_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunrise",POSIXct.out=TRUE)$time
+    sunset_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunset",POSIXct.out=TRUE)$time 
+    data@data <- cbind(data@data,sunrise_timestamp,sunset_timestamp)
+    data.csv <- cbind(data.csv,sunrise_timestamp,sunset_timestamp)
+  }
   
+  # ask the cache and/or Google for the timezone at these coordinates
+  if (local==TRUE | local_details==TRUE) tz_info <- tz_lookup_coords(coordinates(data)[,2], coordinates(data)[,1], method = "accurate")
+
   #return in daylight local
   if(local==TRUE) 
   {
     logger.info("You have selected to add local timestamps.")
     timestamp_local <- apply(data.frame(timestamps(data),tz_info), 1, function(x) as.character(lubridate::with_tz(x[1], x[2])))
+    timestamp_local[which(nchar(timestamp_local)==10)] <- paste(timestamp_local[which(nchar(timestamp_local)==10)],"00:00:00") #adapt midnight format
     data@data <- cbind(data@data,timestamp_local,"local_tz"=tz_info)
     data.csv <- cbind(data.csv,timestamp_local,"local_timezone"=tz_info)
   }
+  
   if (local_details==TRUE)
   {
     logger.info("You have selected to add detailed time information of the local timestamps.")
@@ -47,17 +61,7 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,sunriset=FALSE,mean_s
     data@data <- cbind(data@data,date,time,year,month,weekday,yday,calender_week)
     data.csv <- cbind(data.csv,date,time,year,month,weekday,yday,calender_week)
   }
-  if (sunriset==TRUE)
-  {
-    logger.info("You have selected to add the time of sunrise and sunset.")
-    # add sunrise and sunset times of the day
-    sunrise_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunrise",POSIXct.out=TRUE)$time
-    sunset_timestamp <- sunriset(coordinates(data),timestamps(data),direction="sunset",POSIXct.out=TRUE)$time 
-    data@data <- cbind(data@data,sunrise_timestamp,sunset_timestamp)
-    data.csv <- cbind(data.csv,sunrise_timestamp,sunset_timestamp)
-    # ask the cache and/or Google for the timezone at these coordinates
-    tz_info <- tz_lookup_coords(coordinates(data)[,2], coordinates(data)[,1], method = "accurate")
-  }
+
   if (mean_solar==TRUE)
   {
     logger.info("You have selected to add mean solar time timestamps.")
