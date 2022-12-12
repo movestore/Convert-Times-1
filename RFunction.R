@@ -61,7 +61,7 @@ rFunction <- function(data,local=FALSE,local_details=FALSE,sunriset=FALSE,mean_s
     data@data <- cbind(data@data,date,time,year,month,weekday,yday,calender_week)
     data.csv <- cbind(data.csv,date,time,year,month,weekday,yday,calender_week)
   }
-  
+
   if (mean_solar==TRUE)
   {
     logger.info("You have selected to add mean solar time timestamps.")
